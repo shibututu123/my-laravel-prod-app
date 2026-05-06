@@ -1,0 +1,63 @@
+name: Deploy Laravel to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to laravel-prod-server1
+        run: |
+          aws ssm send-command \
+            --instance-ids "${{ secrets.EC2_INSTANCE_ID_1 }}" \
+            --document-name "AWS-RunShellScript" \
+            --comment "Deploy Laravel" \
+            --parameters 'commands=[
+              "cd /var/www/my-laravel-prod-app",
+              "git pull origin main",
+              "composer install --no-dev --optimize-autoloader",
+              "php artisan migrate --force",
+              "php artisan config:cache",
+              "php artisan route:cache",
+              "php artisan view:cache",
+              "chown -R www-data:www-data /var/www/my-laravel-prod-app",
+              "systemctl reload nginx"
+            ]'
+
+      - name: Wait for server1 to finish
+        run: sleep 15
+
+      - name: Deploy to laravel-prod-server2
+        run: |
+          aws ssm send-command \
+            --instance-ids "${{ secrets.EC2_INSTANCE_ID_2 }}" \
+            --document-name "AWS-RunShellScript" \
+            --comment "Deploy Laravel" \
+            --parameters 'commands=[
+              "cd /var/www/my-laravel-prod-app",
+              "git pull origin main",
+              "composer install --no-dev --optimize-autoloader",
+              "php artisan migrate --force",
+              "php artisan config:cache",
+              "php artisan route:cache",
+              "php artisan view:cache",
+              "chown -R www-data:www-data /var/www/my-laravel-prod-app",
+              "systemctl reload nginx"
+            ]'

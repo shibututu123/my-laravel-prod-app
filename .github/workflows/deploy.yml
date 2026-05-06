@@ -30,6 +30,7 @@ jobs:
             --document-name "AWS-RunShellScript" \
             --comment "Deploy Laravel" \
             --parameters 'commands=[
+              "git config --global --add safe.directory /var/www/my-laravel-prod-app",
               "cd /var/www/my-laravel-prod-app",
               "git pull origin main",
               "composer install --no-dev --optimize-autoloader",
@@ -51,6 +52,7 @@ jobs:
             --document-name "AWS-RunShellScript" \
             --comment "Deploy Laravel" \
             --parameters 'commands=[
+              "git config --global --add safe.directory /var/www/my-laravel-prod-app",
               "cd /var/www/my-laravel-prod-app",
               "git pull origin main",
               "composer install --no-dev --optimize-autoloader",

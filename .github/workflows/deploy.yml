@@ -24,17 +24,17 @@ jobs:
             --document-name "AWS-RunShellScript" \
             --comment "Deploy Laravel" \
             --parameters 'commands=[
-              "git config --global --add safe.directory /var/www/my-laravel-prod-app && cd /var/www/my-laravel-prod-app && git pull origin main",
-              "cd /var/www/my-laravel-prod-app && composer install --no-dev --optimize-autoloader",
+              "export HOME=/root && git config --global --add safe.directory /var/www/my-laravel-prod-app && cd /var/www/my-laravel-prod-app && git pull origin main",
+              "export HOME=/root && export COMPOSER_ALLOW_SUPERUSER=1 && cd /var/www/my-laravel-prod-app && composer install --no-dev --optimize-autoloader",
               "cd /var/www/my-laravel-prod-app && php artisan migrate --force",
               "cd /var/www/my-laravel-prod-app && php artisan config:cache",
               "cd /var/www/my-laravel-prod-app && php artisan route:cache",
               "cd /var/www/my-laravel-prod-app && php artisan view:cache",
               "chown -R www-data:www-data /var/www/my-laravel-prod-app",
-              "systemctl reload nginx"
+              "systemctl daemon-reload && systemctl reload nginx"
             ]'
       - name: Wait for server1 to finish
-        run: sleep 15
+        run: sleep 30
       - name: Deploy to laravel-prod-server2
         run: |
           aws ssm send-command \
@@ -42,12 +42,12 @@ jobs:
             --document-name "AWS-RunShellScript" \
             --comment "Deploy Laravel" \
             --parameters 'commands=[
-              "git config --global --add safe.directory /var/www/my-laravel-prod-app && cd /var/www/my-laravel-prod-app && git pull origin main",
-              "cd /var/www/my-laravel-prod-app && composer install --no-dev --optimize-autoloader",
+              "export HOME=/root && git config --global --add safe.directory /var/www/my-laravel-prod-app && cd /var/www/my-laravel-prod-app && git pull origin main",
+              "export HOME=/root && export COMPOSER_ALLOW_SUPERUSER=1 && cd /var/www/my-laravel-prod-app && composer install --no-dev --optimize-autoloader",
               "cd /var/www/my-laravel-prod-app && php artisan migrate --force",
               "cd /var/www/my-laravel-prod-app && php artisan config:cache",
               "cd /var/www/my-laravel-prod-app && php artisan route:cache",
               "cd /var/www/my-laravel-prod-app && php artisan view:cache",
               "chown -R www-data:www-data /var/www/my-laravel-prod-app",
-              "systemctl reload nginx"
+              "systemctl daemon-reload && systemctl reload nginx"
             ]'

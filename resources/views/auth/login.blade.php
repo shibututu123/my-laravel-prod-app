@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.guest')
 
 @section('content')
 <div class="min-h-screen bg-base-200 flex items-center justify-center">

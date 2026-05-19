@@ -1,80 +1,91 @@
-<!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <title>{{ config('app.name', 'Laravel') }}</title>
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-
-    <!-- Scripts -->
-   {{-- @vite(['resources/sass/app.scss', 'resources/js/app.js']) --}}
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+<body class="bg-base-200">
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
+<div class="flex min-h-screen">
 
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
-
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
-
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="w-52 bg-white flex flex-col justify-between py-6 px-3 shadow-md fixed h-full z-10">
+        <div>
+            <!-- User -->
+            <div class="flex items-center gap-2 px-2 mb-8">
+                <div class="avatar placeholder">
+                    <div class="bg-indigo-100 text-indigo-600 rounded-full w-10">
+                        <span class="text-sm font-bold">
+                            {{ Auth::check() ? strtoupper(substr(Auth::user()->name, 0, 1)) : 'G' }}
+                        </span>
+                    </div>
                 </div>
+                <span class="font-semibold text-sm truncate">
+                    {{ Auth::check() ? Auth::user()->name : 'Guest' }}
+                </span>
+                @auth
+                <form method="POST" action="{{ route('logout') }}" class="ml-auto">
+                    @csrf
+                    <button type="submit" class="text-red-400 hover:text-red-600" title="Logout">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1" />
+                        </svg>
+                    </button>
+                </form>
+                @endauth
             </div>
-        </nav>
 
-        <main class="py-4">
+            <!-- Nav Links -->
+            <ul class="menu w-full p-0 gap-1">
+                <li>
+                    <a href="{{ url('/home') }}"
+                        class="{{ request()->is('home') ? 'bg-indigo-500 text-white hover:bg-indigo-600' : 'hover:bg-base-200' }} rounded-lg font-semibold">
+                        Job Orders
+                    </a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="{{ request()->is('casual-pool') ? 'bg-indigo-500 text-white hover:bg-indigo-600' : 'hover:bg-base-200' }} rounded-lg">
+                        Casual Pool
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Bottom Logo -->
+        <div class="flex items-center gap-2 px-2">
+            <svg class="w-5 h-5 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <span class="font-bold text-sm">Agentic Ai</span>
+        </div>
+    </aside>
+
+    <!-- ===== MAIN AREA ===== -->
+    <div class="ml-52 flex-1 flex flex-col">
+
+        <!-- ===== HEADER ===== -->
+        <header class="bg-white shadow-sm px-6 py-3 sticky top-0 z-10">
+            <select class="select select-bordered w-full max-w-xl bg-base-100 text-sm">
+                <option>Action Workforce - NSW - AP</option>
+                <option>Action Workforce - VIC - AP</option>
+                <option>Action Workforce - QLD - AP</option>
+            </select>
+        </header>
+
+        <!-- ===== PAGE CONTENT ===== -->
+        <main class="flex-1 p-8">
             @yield('content')
         </main>
+
     </div>
+</div>
+
 </body>
 </html>

@@ -1,71 +1,70 @@
 @extends('layouts.guest')
 
 @section('content')
-<div class="min-h-screen bg-base-200 flex items-center justify-center">
-    <div class="card w-full max-w-md shadow-2xl bg-base-100">
-        <div class="card-body">
+<div class="card shadow-2xl bg-white rounded-2xl p-4" style="width:480px;">
+    <div class="card-body">
 
-            <h2 class="text-2xl font-bold text-center mb-4">
-                Login
-            </h2>
+        <h2 class="text-3xl font-bold text-center mb-6">Login</h2>
 
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
 
-                <!-- Email -->
-                <div class="form-control mb-3">
+            <div class="form-control mb-4">
+                <label class="label">
+                    <span class="label-text text-base">Email</span>
+                </label>
+                <input type="email" name="email" value="{{ old('email') }}"
+                    placeholder="Enter your email"
+                    class="input input-bordered w-full text-base @error('email') input-error @enderror"
+                    required autofocus />
+                @error('email')
                     <label class="label">
-                        <span class="label-text">Email</span>
+                        <span class="label-text-alt text-error">{{ $message }}</span>
                     </label>
-                    <input type="email" name="email" value="{{ old('email') }}"
-                        placeholder="Enter your email"
-                        class="input input-bordered @error('email') input-error @enderror"
-                        required autofocus />
-                    @error('email')
-                        <label class="label">
-                            <span class="label-text-alt text-error">{{ $message }}</span>
-                        </label>
-                    @enderror
-                </div>
+                @enderror
+            </div>
 
-                <!-- Password -->
-                <div class="form-control mb-3">
+            <div class="form-control mb-4">
+                <label class="label">
+                    <span class="label-text text-base">Password</span>
+                </label>
+                <input type="password" name="password"
+                    placeholder="••••••••"
+                    class="input input-bordered w-full text-base @error('password') input-error @enderror"
+                    required />
+                @error('password')
                     <label class="label">
-                        <span class="label-text">Password</span>
+                        <span class="label-text-alt text-error">{{ $message }}</span>
                     </label>
-                    <input type="password" name="password"
-                        placeholder="••••••••"
-                        class="input input-bordered @error('password') input-error @enderror"
-                        required />
-                    @error('password')
-                        <label class="label">
-                            <span class="label-text-alt text-error">{{ $message }}</span>
-                        </label>
-                    @enderror
+                @enderror
+            </div>
+
+            <div class="form-control mb-6">
+                <label class="label cursor-pointer justify-start gap-3">
+                    <input type="checkbox" name="remember" class="checkbox checkbox-primary" />
+                    <span class="label-text text-base">Remember me</span>
+                </label>
+            </div>
+
+            <div class="form-control mb-4">
+                <button type="submit"
+                    class="btn w-full text-white text-base font-semibold rounded-xl py-3"
+                    style="background-color:#4f35d2;">
+                    Login
+                </button>
+            </div>
+
+            @if (Route::has('password.request'))
+                <div class="text-center mt-2">
+                    <a href="{{ route('password.request') }}"
+                        class="text-sm underline"
+                        style="color:#4f35d2;">
+                        Forgot your password?
+                    </a>
                 </div>
+            @endif
 
-                <!-- Remember Me -->
-                <div class="form-control mb-4">
-                    <label class="label cursor-pointer justify-start gap-3">
-                        <input type="checkbox" name="remember" class="checkbox checkbox-primary" />
-                        <span class="label-text">Remember me</span>
-                    </label>
-                </div>
-
-                <div class="form-control">
-                    <button type="submit" class="btn btn-primary w-full">Login</button>
-                </div>
-
-                @if (Route::has('password.request'))
-                    <div class="text-center mt-4">
-                        <a href="{{ route('password.request') }}" class="link link-primary text-sm">
-                            Forgot your password?
-                        </a>
-                    </div>
-                @endif
-
-            </form>
-        </div>
+        </form>
     </div>
 </div>
 @endsection

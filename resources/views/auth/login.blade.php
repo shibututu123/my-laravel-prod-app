@@ -1,8 +1,8 @@
 @extends('layouts.guest')
 
 @section('content')
-<div class="card shadow-2xl bg-white rounded-2xl p-4" style="width:480px;">
-    <div class="card-body">
+<div class="card shadow-2xl bg-white rounded-2xl w-full max-w-md mx-auto">
+    <div class="card-body p-6 sm:p-10">
 
         <h2 class="text-3xl font-bold text-center mb-6">Login</h2>
 
@@ -15,7 +15,7 @@
                 </label>
                 <input type="email" name="email" value="{{ old('email') }}"
                     placeholder="Enter your email"
-                    class="input input-bordered w-full text-base @error('email') input-error @enderror"
+                    class="input input-bordered w-full @error('email') input-error @enderror"
                     required autofocus />
                 @error('email')
                     <label class="label">
@@ -30,7 +30,7 @@
                 </label>
                 <input type="password" name="password"
                     placeholder="••••••••"
-                    class="input input-bordered w-full text-base @error('password') input-error @enderror"
+                    class="input input-bordered w-full @error('password') input-error @enderror"
                     required />
                 @error('password')
                     <label class="label">
@@ -48,7 +48,7 @@
 
             <div class="form-control mb-4">
                 <button type="submit"
-                    class="btn w-full text-white text-base font-semibold rounded-xl py-3"
+                    class="btn w-full text-white text-base font-semibold rounded-xl"
                     style="background-color:#4f35d2;">
                     Login
                 </button>
@@ -63,7 +63,6 @@
                     </a>
                 </div>
             @endif
-
         </form>
     </div>
 </div>

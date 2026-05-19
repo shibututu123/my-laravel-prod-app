@@ -6,7 +6,7 @@
         <div class="card-body">
 
             <h2 class="text-2xl font-bold text-center mb-4">
-                {{ config('app.name') }} Login
+                Login
             </h2>
 
             <form method="POST" action="{{ route('login') }}">
@@ -18,7 +18,7 @@
                         <span class="label-text">Email</span>
                     </label>
                     <input type="email" name="email" value="{{ old('email') }}"
-                        placeholder="you@example.com"
+                        placeholder="Enter your email"
                         class="input input-bordered @error('email') input-error @enderror"
                         required autofocus />
                     @error('email')
